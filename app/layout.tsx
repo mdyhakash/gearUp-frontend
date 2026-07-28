@@ -36,9 +36,9 @@ export default function RootLayout({
         className={`${archivo.variable} ${inter.variable} ${plexMono.variable} font-sans antialiased`}
       >
         <div className="flex min-h-screen flex-col">
-          <Navbar />
+          {/* <Navbar /> */}
           <main className="flex-1">{children}</main>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </body>
     </html>

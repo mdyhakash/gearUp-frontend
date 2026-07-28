@@ -1,6 +1,7 @@
+import { GearFilters } from "@/components/gear/gear-filters";
 import { GearGrid } from "@/components/gear/gear-grid";
 import { mockGear } from "@/lib/data";
-import { GearFilters } from "../../components/gear/gear-filters";
+
 
 export default function BrowseGearPage() {
   return (
