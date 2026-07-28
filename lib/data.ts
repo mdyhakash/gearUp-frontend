@@ -95,3 +95,35 @@ export const mockGear: GearItem[] = [
     rating: 4.9,
   },
 ];
+export const mockReviews = [
+  {
+    id: "r1",
+    customerName: "Sarah M.",
+    rating: 5,
+    comment:
+      "Tent was in great shape, easy pickup and drop-off. Would rent again.",
+    date: "2 weeks ago",
+  },
+  {
+    id: "r2",
+    customerName: "James O.",
+    rating: 4,
+    comment:
+      "Good quality, one pole was slightly bent but didn't affect setup.",
+    date: "1 month ago",
+  },
+  {
+    id: "r3",
+    customerName: "Priya K.",
+    rating: 5,
+    comment: "Provider was responsive and gear matched the listing exactly.",
+    date: "1 month ago",
+  },
+];
+
+export const mockGearImages = [
+  "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=900&q=80",
+  "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=900&q=80",
+  "https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=900&q=80",
+  "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=900&q=80",
+];
