@@ -14,30 +14,38 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LayoutDashboard, LogOut, Settings } from "lucide-react";
 
-const navLinks = [{ label: "Browse Gear", href: "/gear" }];
+const navLinks = [
+  { label: "Browse Gear", href: "/gear" },
+  { label: "How It Works", href: "/#how-it-works" },
+];
 
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-8">
-          <Logo />
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+      <div className="mx-auto grid h-16 max-w-7xl grid-cols-2 items-center px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+        <Logo />
 
-        <div className="hidden md:flex items-center gap-3">
+        <nav className="hidden items-center justify-center gap-6 lg:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden items-center justify-end gap-3 lg:flex">
           <Button variant="ghost" asChild>
             <Link href="/login">Log in</Link>
+          </Button>
+          <Button
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+            asChild
+          >
+            <Link href="/register">Get Started</Link>
           </Button>
 
           {/* Signed-in state example */}
@@ -66,7 +74,9 @@ export function Navbar() {
           </DropdownMenu>
         </div>
 
-        <MobileNav navLinks={navLinks} />
+        <div className="flex justify-end lg:hidden">
+          <MobileNav navLinks={navLinks} />
+        </div>
       </div>
     </header>
   );
