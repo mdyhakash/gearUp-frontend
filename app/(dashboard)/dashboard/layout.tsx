@@ -17,7 +17,7 @@ export default function CustomerDashboardLayout({
   return (
     <div className="mx-auto flex max-w-[1600px]">
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-border bg-card lg:flex lg:flex-col">
-        <div className="border-b border-border px-5 py-5">
+        <div className="flex h-16 items-center border-b border-border px-5">
           <Logo />
         </div>
         <div className="flex-1 overflow-y-auto py-4">

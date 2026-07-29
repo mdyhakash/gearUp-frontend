@@ -1,7 +1,7 @@
 import { MapPin, Package, ShieldCheck, Star } from "lucide-react";
 import { GearGallery } from "@/components/gear/gear-gallery";
 import { RentWidget } from "@/components/gear/rent-widget";
-import { ConditionBadge } from "@/components/gear/condition-badge";
+import { ConditionBadge } from "@/components/condition-badge";
 import { ReviewItem } from "@/components/reviews/review-item";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
