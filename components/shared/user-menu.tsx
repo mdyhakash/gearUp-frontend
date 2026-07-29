@@ -18,9 +18,15 @@ import { UserMenuProps } from "@/types/user";
 export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const isDashboard = pathname.startsWith("/dashboard");
+  const isDashboard = pathname.includes("dashboard");
+
+  const dashboardRoutes = {
+    ADMIN: "/admin-dashboard",
+    PROVIDER: "/provider-dashboard",
+    CUSTOMER: "/dashboard",
+  } as const;
   const navLink = {
-    href: isDashboard ? "/gear" : "/dashboard",
+    href: isDashboard ? "/gear" : dashboardRoutes[user.role],
     label: isDashboard ? "Browse Gear" : "Dashboard",
   };
   const handlelogout = async () => {
@@ -28,7 +34,7 @@ export function UserMenu({ user }: UserMenuProps) {
     toast.success("User Logged Out Successfully!");
     router.push("/");
   };
-
+  console.log("UserMenu render:", user);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
