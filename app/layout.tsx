@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${archivo.variable} ${inter.variable} ${plexMono.variable} font-sans antialiased`}
       >
+        <Toaster />
         <div className="flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>
         </div>

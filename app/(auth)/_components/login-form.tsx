@@ -1,21 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { loginAction } from "../_actions/authAction";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [state, action, pending] = useActionState(loginAction, false);
+
+  // useEffect(() => {
+  //   if (!state.success) {
+  //     toast.error(state.message || "Login failed");
+  //   }
+  // }, [state]);
 
   return (
-    <form className="space-y-5">
+    <form action={action} className="space-y-5">
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" placeholder="you@example.com" />
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+        />
       </div>
 
       <div className="space-y-2">
@@ -23,6 +37,7 @@ export function LoginForm() {
         <div className="relative">
           <Input
             id="password"
+            name="password"
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
           />
