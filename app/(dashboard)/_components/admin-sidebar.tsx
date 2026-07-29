@@ -7,6 +7,7 @@ import {
   ClipboardList,
   Tags,
   Settings,
+  UserCircle,
 } from "lucide-react";
 
 import { SidebarNav, DashboardNavItem } from "./sidebar-nav";
@@ -37,6 +38,7 @@ const navItems: DashboardNavItem[] = [
     href: "/admin-dashboard/users",
     icon: Users,
   },
+  { label: "My Profile", href: "/admin-dashboard/profile", icon: UserCircle },
   {
     label: "Settings",
     href: "/admin-dashboard/settings",
