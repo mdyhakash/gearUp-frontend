@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Archivo, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-import { Footer } from "@/components/shared/footer";
-import { Navbar } from "@/components/shared/navbar";
-
 const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
@@ -36,9 +33,7 @@ export default function RootLayout({
         className={`${archivo.variable} ${inter.variable} ${plexMono.variable} font-sans antialiased`}
       >
         <div className="flex min-h-screen flex-col">
-          {/* <Navbar /> */}
           <main className="flex-1">{children}</main>
-          {/* <Footer /> */}
         </div>
       </body>
     </html>

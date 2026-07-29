@@ -127,3 +127,115 @@ export const mockGearImages = [
   "https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=900&q=80",
   "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=900&q=80",
 ];
+export const mockOrders = [
+  {
+    id: "ORD-1042",
+    gearName: "4-Person Dome Tent",
+    dates: "Aug 2 – Aug 5",
+    total: 54,
+    status: "PICKED_UP" as const,
+  },
+  {
+    id: "ORD-1041",
+    gearName: "Carbon Mountain Bike",
+    dates: "Jul 28 – Jul 30",
+    total: 64,
+    status: "CONFIRMED" as const,
+  },
+  {
+    id: "ORD-1039",
+    gearName: "Inflatable Kayak",
+    dates: "Jul 20 – Jul 22",
+    total: 50,
+    status: "RETURNED" as const,
+  },
+  {
+    id: "ORD-1035",
+    gearName: "Climbing Harness Set",
+    dates: "Jul 10 – Jul 12",
+    total: 30,
+    status: "CANCELLED" as const,
+  },
+];
+
+export const mockInventory = [
+  {
+    id: "1",
+    name: "4-Person Dome Tent",
+    category: "Camping",
+    dailyRate: 18,
+    stock: 4,
+    isAvailable: true,
+  },
+  {
+    id: "6",
+    name: "60L Hiking Backpack",
+    category: "Hiking",
+    dailyRate: 12,
+    stock: 8,
+    isAvailable: true,
+  },
+  {
+    id: "7",
+    name: "2-Person Kayak",
+    category: "Water Sports",
+    dailyRate: 22,
+    stock: 0,
+    isAvailable: false,
+  },
+];
+
+export const mockIncomingOrders = [
+  {
+    id: "ORD-2091",
+    customerName: "Maria Chen",
+    gearName: "4-Person Dome Tent",
+    dates: "Aug 4 – Aug 6",
+    status: "PLACED" as const,
+  },
+  {
+    id: "ORD-2088",
+    customerName: "Tom Baker",
+    gearName: "60L Hiking Backpack",
+    dates: "Aug 1 – Aug 3",
+    status: "PAID" as const,
+  },
+  {
+    id: "ORD-2081",
+    customerName: "Lena Fox",
+    gearName: "4-Person Dome Tent",
+    dates: "Jul 25 – Jul 27",
+    status: "PICKED_UP" as const,
+  },
+];
+
+export const mockUsers = [
+  {
+    id: "u1",
+    name: "Maria Chen",
+    email: "maria@example.com",
+    role: "CUSTOMER" as const,
+    status: "ACTIVE" as const,
+  },
+  {
+    id: "u2",
+    name: "Trailhead Outfitters",
+    email: "hello@trailhead.co",
+    role: "PROVIDER" as const,
+    status: "ACTIVE" as const,
+  },
+  {
+    id: "u3",
+    name: "Tom Baker",
+    email: "tom@example.com",
+    role: "CUSTOMER" as const,
+    status: "BLOCKED" as const,
+  },
+  {
+    id: "u4",
+    name: "Ridgeline Bikes",
+    email: "team@ridgeline.co",
+    role: "PROVIDER" as const,
+    status: "ACTIVE" as const,
+  },
+];
