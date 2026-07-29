@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { Tent, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { registerAction } from "../_actions/authAction";
 
 const roles = [
   {
@@ -23,11 +24,17 @@ const roles = [
   },
 ] as const;
 
+const initialState = {
+  success: false,
+  statusCode: 0,
+  message: "",
+};
 export function RegisterForm() {
   const [role, setRole] = useState<(typeof roles)[number]["value"]>("CUSTOMER");
+  const [state, action, pending] = useActionState(registerAction, initialState);
 
   return (
-    <form className="space-y-5">
+    <form action={action} className="space-y-5">
       <div className="grid grid-cols-2 gap-3">
         {roles.map((r) => (
           <button
@@ -54,34 +61,45 @@ export function RegisterForm() {
           </button>
         ))}
       </div>
-
+      <input type="hidden" name="role" value={role} />
       <div className="space-y-2">
         <Label htmlFor="name">Full name</Label>
-        <Input id="name" placeholder="Jordan Lee" />
+        <Input id="name" name="name" placeholder="Jordan Lee" />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="reg-email">Email</Label>
-        <Input id="reg-email" type="email" placeholder="you@example.com" />
+        <Input
+          id="reg-email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+        />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-3">
+        {/* <div className="space-y-2">
           <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" type="tel" placeholder="+1 555 0100" />
-        </div>
+          <Input id="phone" name="phone" type="tel" placeholder="+1 555 0100" />
+        </div> */}
         <div className="space-y-2">
           <Label htmlFor="reg-password">Password</Label>
-          <Input id="reg-password" type="password" placeholder="••••••••" />
+          <Input
+            id="reg-password"
+            name="password"
+            type="password"
+            placeholder="••••••••"
+          />
         </div>
       </div>
 
       <Button
         type="submit"
         size="lg"
+        disabled={pending}
         className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
       >
-        Create account
+        {pending ? "Creating account..." : "Create account"}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
