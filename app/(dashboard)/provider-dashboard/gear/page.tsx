@@ -4,28 +4,33 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { getAllProviderGear } from "../_actions/gearAction";
 import { getMe } from "@/service/getMe";
+import { DeleteGearButton } from "../_components/delete-gear-button";
+import { GearForm } from "@/components/gear/gear-form";
+import { getAllCategories } from "../../admin-dashboard/_actions/categoryAction";
 
 export default async function ProviderInventoryPage() {
   const { data: gears, error } = await getAllProviderGear();
+  const { data: categories } = await getAllCategories();
   const me = await getMe();
   const providerId = me.data.result.id;
   const providerGears = gears.filter((gear) => gear.provider.id === providerId);
-  console.log(providerId);
-  console.log(gears);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-xl font-bold text-foreground">
           Inventory
         </h2>
-        <Button
-          className="bg-primary text-primary-foreground hover:bg-primary/90"
-          asChild
-        >
-          <Link href="/provider-dashboard/gear/new">
-            <Plus className="mr-1.5 h-4 w-4" /> Add Gear
-          </Link>
-        </Button>
+        <GearForm
+          mode="create"
+          categories={categories}
+          trigger={
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Plus className="mr-1.5 h-4 w-4" />
+              Add Gear
+            </Button>
+          }
+        />
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card">
@@ -60,17 +65,17 @@ export default async function ProviderInventoryPage() {
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-1">
-                    <Button variant="ghost" size="icon" aria-label="Edit">
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label="Delete"
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <GearForm
+                      mode="edit"
+                      categories={categories}
+                      initialValues={g}
+                      trigger={
+                        <Button variant="ghost" size="icon" aria-label="Edit">
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                      }
+                    />
+                    <DeleteGearButton gearId={g.id} />
                   </div>
                 </td>
               </tr>
