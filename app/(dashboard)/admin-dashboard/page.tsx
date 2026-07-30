@@ -23,12 +23,7 @@ export default async function AdminOverviewPage() {
   );
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard
-        label="Total Users"
-        value={totalUsers}
-        icon={Users}
-        trend="+18 this week"
-      />
+      <StatCard label="Total Users" value={totalUsers} icon={Users} />
       <StatCard label="Active Gear" value={totalGear} icon={Package} />
       <StatCard label="Total Rentals" value={totalRentals} icon={ListOrdered} />
       <StatCard
