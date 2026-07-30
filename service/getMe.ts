@@ -15,12 +15,14 @@ export const getMe = async () => {
     headers: {
       Cookie: `accessToken=${accessToken}`,
     },
-    cache: "force-cache",
-    next: {
-      revalidate: 60 * 60 * 24,
-      tags: ["my-profile"],
-    },
+    cache: "no-store",
   });
+  if (!res.ok) {
+    return {
+      success: false,
+      message: "Failed to fetch profile",
+    };
+  }
   const result = res.json();
 
   return result;

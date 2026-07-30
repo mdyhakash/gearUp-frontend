@@ -57,8 +57,8 @@ export default async function proxy(request: NextRequest) {
   }
 
   const isAuthenticated = !!decodedAccess?.success;
-  const userRole = isAuthenticated
-    ? ((decodedAccess!.data as JwtPayload).role as Role)
+  const userRole = decodedAccess?.success
+    ? ((decodedAccess.data as JwtPayload).role as Role)
     : null;
 
   const isPublicRoute = matchesRoute(PUBLIC_ROUTES, pathname);
