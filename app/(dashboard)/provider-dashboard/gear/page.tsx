@@ -2,9 +2,18 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { mockInventory } from "@/lib/data";
+import { getAllProviderGear } from "../_actions/gearAction";
+import { getMe } from "@/service/getMe";
 
-export default function ProviderInventoryPage() {
+export default async function ProviderInventoryPage() {
+  const { data: gears, error } = await getAllProviderGear();
+  const me = await getMe();
+  console.log("me", me);
+
+  const providerId = me.data.result.id;
+  const providerGears = gears.filter((gear) => gear.provider.id === providerId);
+  console.log(providerId);
+  console.log(gears);
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -15,7 +24,7 @@ export default function ProviderInventoryPage() {
           className="bg-primary text-primary-foreground hover:bg-primary/90"
           asChild
         >
-          <Link href="/dashboard/provider/gear/new">
+          <Link href="/provider-dashboard/gear/new">
             <Plus className="mr-1.5 h-4 w-4" /> Add Gear
           </Link>
         </Button>
@@ -34,13 +43,13 @@ export default function ProviderInventoryPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {mockInventory.map((g) => (
+            {providerGears.map((g) => (
               <tr key={g.id}>
                 <td className="px-5 py-4 font-medium text-foreground">
                   {g.name}
                 </td>
                 <td className="hidden px-5 py-4 text-muted-foreground sm:table-cell">
-                  {g.category}
+                  {g.category.name}
                 </td>
                 <td className="px-5 py-4 font-mono text-foreground">
                   ${g.dailyRate}/day

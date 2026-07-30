@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { UploadCloud, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,21 +14,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categories } from "@/lib/data";
-
-export function GearForm() {
+import { createGearAction } from "@/app/(dashboard)/provider-dashboard/_actions/gearAction";
+import { Category } from "@/app/(dashboard)/admin-dashboard/_actions/categoryAction";
+type GearFormProps = {
+  categories: Category[];
+};
+const initialState = {
+  success: false,
+  statusCode: 0,
+  message: "",
+};
+export function GearForm({ categories }: GearFormProps) {
   const [imageUrl, setImageUrl] = useState("");
+  const [state, action, pending] = useActionState(
+    createGearAction,
+    initialState,
+  );
+  const [categoryId, setCategoryId] = useState("");
+  const [condition, setCondition] = useState("NEW");
+  const [isAvailable, setIsAvailable] = useState(true);
 
   return (
-    <form className="space-y-6">
+    <form action={action} className="space-y-6">
+      {state?.message && !state.success && (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-2.5 text-sm text-destructive">
+          {state.message}
+        </div>
+      )}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Gear Name</Label>
-          <Input placeholder="e.g. 4-Person Dome Tent" />
+          <Input name="name" placeholder="e.g. 4-Person Dome Tent" />
         </div>
         <div className="space-y-2">
           <Label>Brand</Label>
-          <Input placeholder="e.g. Coleman" />
+          <Input name="brand" placeholder="e.g. Coleman" />
         </div>
       </div>
 
@@ -36,6 +56,7 @@ export function GearForm() {
         <Label>Description</Label>
         <Textarea
           rows={4}
+          name="description"
           placeholder="Describe the gear, its condition, and what's included..."
         />
       </div>
@@ -43,22 +64,23 @@ export function GearForm() {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="space-y-2">
           <Label>Category</Label>
-          <Select>
+          <Select value={categoryId} onValueChange={setCategoryId}>
             <SelectTrigger>
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
               {categories.map((c) => (
-                <SelectItem key={c} value={c}>
-                  {c}
+                <SelectItem key={c.id} value={c.id}>
+                  {c.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          <input type="hidden" name="categoryId" value={categoryId} />
         </div>
         <div className="space-y-2">
           <Label>Condition</Label>
-          <Select>
+          <Select value={condition} onValueChange={setCondition}>
             <SelectTrigger>
               <SelectValue placeholder="Select condition" />
             </SelectTrigger>
@@ -69,17 +91,18 @@ export function GearForm() {
               <SelectItem value="DAMAGED">Damaged</SelectItem>
             </SelectContent>
           </Select>
+          <input type="hidden" name="condition" value={condition} />
         </div>
         <div className="space-y-2">
           <Label>Stock (units)</Label>
-          <Input type="number" min={0} placeholder="1" />
+          <Input name="stock" type="number" min={0} placeholder="1" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Daily Rate ($)</Label>
-          <Input type="number" min={0} placeholder="15" />
+          <Input name="dailyRate" type="number" min={0} placeholder="15" />
         </div>
         <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
           <div>
@@ -88,7 +111,13 @@ export function GearForm() {
               Toggle off to hide from listings
             </p>
           </div>
-          <Switch defaultChecked />
+          <Switch checked={isAvailable} onCheckedChange={setIsAvailable} />
+
+          <input
+            type="hidden"
+            name="isAvailable"
+            value={isAvailable ? "true" : "false"}
+          />
         </div>
       </div>
 
@@ -118,6 +147,7 @@ export function GearForm() {
         )}
         <Input
           placeholder="Paste image URL"
+          name="image"
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
         />
@@ -126,9 +156,10 @@ export function GearForm() {
       <div className="flex gap-3">
         <Button
           type="submit"
+          disabled={pending}
           className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
-          Save Gear
+          {pending ? "Saving..." : "Save Gear"}
         </Button>
         <Button type="button" variant="outline">
           Cancel

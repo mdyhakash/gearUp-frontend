@@ -25,10 +25,6 @@ export const createCategoryAction = async (
 ): Promise<CategoryActionState> => {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  console.log({
-    name,
-    description,
-  });
   const result = await authFetch("/api/categories", {
     method: "POST",
     body: JSON.stringify({ name, description }),
