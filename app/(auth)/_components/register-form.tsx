@@ -35,6 +35,11 @@ export function RegisterForm() {
 
   return (
     <form action={action} className="space-y-5">
+      {state?.message && !state.success && (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-2.5 text-sm text-destructive">
+          {state.message}
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         {roles.map((r) => (
           <button
