@@ -239,3 +239,41 @@ export const mockUsers = [
     status: "ACTIVE" as const,
   },
 ];
+export const mockCategories = [
+  {
+    id: "c1",
+    name: "Camping",
+    description: "Tents, sleeping bags, and campsite essentials.",
+    gearCount: 24,
+  },
+  {
+    id: "c2",
+    name: "Water Sports",
+    description: "Kayaks, paddleboards, and life vests.",
+    gearCount: 15,
+  },
+  {
+    id: "c3",
+    name: "Winter Sports",
+    description: "Snowboards, skis, and cold-weather gear.",
+    gearCount: 9,
+  },
+  {
+    id: "c4",
+    name: "Cycling",
+    description: "Mountain bikes, road bikes, and accessories.",
+    gearCount: 18,
+  },
+  {
+    id: "c5",
+    name: "Climbing",
+    description: "Harnesses, ropes, and climbing protection.",
+    gearCount: 11,
+  },
+  {
+    id: "c6",
+    name: "Hiking",
+    description: "Backpacks, trekking poles, and boots.",
+    gearCount: 20,
+  },
+];
