@@ -1,9 +1,9 @@
 "use server";
 
 import { authFetch } from "@/lib/auth-fetch";
+import { GearItem } from "@/types/gear";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { GearItem } from "../../admin-dashboard/_actions/gearAction";
 
 export interface Gear {
   id: string;

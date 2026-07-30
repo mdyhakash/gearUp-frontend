@@ -3,7 +3,7 @@ import { ArrowRight, ShieldCheck, Tent, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GearGrid } from "@/components/gear/gear-grid";
-import { mockGear } from "@/lib/data";
+import { getAllProviderGear } from "../(dashboard)/provider-dashboard/_actions/gearAction";
 
 const steps = [
   {
@@ -23,7 +23,9 @@ const steps = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { data: gears, error } = await getAllProviderGear();
+  console.log(gears);
   return (
     <div>
       {/* Hero */}
@@ -107,7 +109,7 @@ export default function HomePage() {
             View all <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
-        <GearGrid items={mockGear} />
+        <GearGrid gears={gears} />
       </section>
 
       {/* Provider CTA */}

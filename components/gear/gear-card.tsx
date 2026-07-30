@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
-import { GearItem } from "@/lib/types";
 import { ConditionBadge } from "../condition-badge";
 import { Button } from "@/components/ui/button";
+import { GearItem } from "@/types/gear";
 
 export function GearCard({ gear }: { gear: GearItem }) {
   return (
@@ -39,7 +39,7 @@ export function GearCard({ gear }: { gear: GearItem }) {
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            {gear.category}
+            {gear.category.name}
           </span>
           <ConditionBadge condition={gear.condition} />
         </div>
@@ -50,7 +50,7 @@ export function GearCard({ gear }: { gear: GearItem }) {
         <p className="text-sm text-muted-foreground">{gear.brand}</p>
 
         <div className="mt-1 flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">{gear.providerName}</span>
+          <span className="text-muted-foreground">{gear.provider.name}</span>
           {gear.rating && (
             <span className="flex items-center gap-1 font-mono font-semibold text-foreground">
               <Star className="h-3.5 w-3.5 fill-accent text-accent" />

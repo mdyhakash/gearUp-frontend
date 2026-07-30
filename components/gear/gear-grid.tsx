@@ -1,8 +1,8 @@
-import { GearItem } from "@/lib/types";
+import { GearItem } from "@/types/gear";
 import { GearCard } from "./gear-card";
 
-export function GearGrid({ items }: { items: GearItem[] }) {
-  if (items.length === 0) {
+export function GearGrid({ gears }: { gears: GearItem[] }) {
+  if (gears.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-20 text-center">
         <p className="font-display text-lg font-bold text-foreground">
@@ -17,7 +17,7 @@ export function GearGrid({ items }: { items: GearItem[] }) {
 
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((gear) => (
+      {gears.map((gear) => (
         <GearCard key={gear.id} gear={gear} />
       ))}
     </div>

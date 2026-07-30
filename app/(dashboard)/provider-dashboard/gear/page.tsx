@@ -8,8 +8,6 @@ import { getMe } from "@/service/getMe";
 export default async function ProviderInventoryPage() {
   const { data: gears, error } = await getAllProviderGear();
   const me = await getMe();
-  console.log("me", me);
-
   const providerId = me.data.result.id;
   const providerGears = gears.filter((gear) => gear.provider.id === providerId);
   console.log(providerId);
