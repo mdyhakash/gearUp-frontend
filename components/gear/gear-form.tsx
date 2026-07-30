@@ -30,7 +30,7 @@ import {
 } from "@/app/(dashboard)/provider-dashboard/_actions/gearAction";
 
 import { Category } from "@/app/(dashboard)/admin-dashboard/_actions/categoryAction";
-import { GearItem } from "@/types/gear";
+import { GearCondition, GearItem } from "@/types/gear";
 
 type GearFormProps = {
   categories: Category[];
@@ -62,7 +62,9 @@ export function GearForm({
 
   const [imageUrl, setImageUrl] = useState(initialValues?.image ?? "");
 
-  const [categoryId, setCategoryId] = useState(initialValues?.category.id ?? "");
+  const [categoryId, setCategoryId] = useState(
+    initialValues?.category.id ?? "",
+  );
 
   const [condition, setCondition] = useState(initialValues?.condition ?? "NEW");
 
@@ -153,7 +155,10 @@ export function GearForm({
             <div className="space-y-2">
               <Label>Condition</Label>
 
-              <Select value={condition} onValueChange={setCondition}>
+              <Select
+                value={condition}
+                onValueChange={(value) => setCondition(value as GearCondition)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

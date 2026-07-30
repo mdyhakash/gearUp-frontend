@@ -2,6 +2,7 @@ export type GearCondition = "NEW" | "GOOD" | "FAIR" | "DAMAGED";
 export interface GearItem {
   id: string;
   name: string;
+  description?: string;
   brand?: string;
   image?: string;
   dailyRate: number;
