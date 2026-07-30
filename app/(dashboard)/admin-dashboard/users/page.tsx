@@ -1,7 +1,5 @@
-import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -72,7 +70,20 @@ export default async function AdminUsersPage({
                   <td className="hidden px-5 py-4 text-muted-foreground sm:table-cell">
                     {u.email}
                   </td>
-                  <td className="px-5 py-4 text-muted-foreground">{u.role}</td>
+                  <td className="px-5 py-4">
+                    <span
+                      className={cn(
+                        "rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                        u.role === "ADMIN"
+                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400"
+                          : u.role === "PROVIDER"
+                            ? "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400"
+                            : "bg-yellow-300 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-400",
+                      )}
+                    >
+                      {u.role}
+                    </span>
+                  </td>
                   <td className="px-5 py-4">
                     <span
                       className={cn(
