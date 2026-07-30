@@ -34,7 +34,7 @@ export function UserMenu({ user }: UserMenuProps) {
     toast.success("User Logged Out Successfully!");
     router.push("/");
   };
-  console.log("UserMenu render:", user);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
