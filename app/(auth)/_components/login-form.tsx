@@ -13,15 +13,13 @@ import { toast } from "sonner";
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [state, action, pending] = useActionState(loginAction, false);
-
-  // useEffect(() => {
-  //   if (!state.success) {
-  //     toast.error(state.message || "Login failed");
-  //   }
-  // }, [state]);
-
   return (
     <form action={action} className="space-y-5">
+      {state?.message && !state.success && (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-2.5 text-sm text-destructive">
+          {state.message}
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
