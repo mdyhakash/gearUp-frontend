@@ -31,6 +31,7 @@ import {
 
 import { Category } from "@/app/(dashboard)/admin-dashboard/_actions/categoryAction";
 import { GearCondition, GearItem } from "@/types/gear";
+import { Badge } from "../ui/badge";
 
 type GearFormProps = {
   categories: Category[];
@@ -63,7 +64,7 @@ export function GearForm({
   const [imageUrl, setImageUrl] = useState(initialValues?.image ?? "");
 
   const [categoryId, setCategoryId] = useState(
-    initialValues?.category.id ?? "",
+    initialValues?.category?.id ?? "",
   );
 
   const [condition, setCondition] = useState(initialValues?.condition ?? "NEW");
@@ -201,17 +202,16 @@ export function GearForm({
               />
             </div>
 
-            <div className="flex items-center justify-between rounded-lg border border-border px-4 py-3">
-              <div>
-                <Label>Available for rent</Label>
+            <div className="flex items-center gap-3">
+              <Badge variant={isAvailable ? "default" : "secondary"}>
+                {isAvailable ? "Available" : "Unavailable"}
+              </Badge>
 
-                <p className="text-xs text-muted-foreground">
-                  Toggle off to hide from listings
-                </p>
-              </div>
-
-              <Switch checked={isAvailable} onCheckedChange={setIsAvailable} />
-
+              <Switch
+                checked={isAvailable}
+                onCheckedChange={setIsAvailable}
+                className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-gray-300"
+              />
               <input
                 type="hidden"
                 name="isAvailable"
