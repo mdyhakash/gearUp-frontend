@@ -1,29 +1,9 @@
 "use server";
+import { authFetch } from "@/lib/auth-fetch";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export const authFetch = async (path: string, options: RequestInit = {}) => {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
 
-  const res = await fetch(`${process.env.BACKEND_API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `accessToken=${accessToken}`,
-      ...options.headers,
-    },
-    cache: "no-store",
-  });
-  const json = await res.json();
-  if (!res.ok || !json.success) {
-    return {
-      success: false as const,
-      message: json?.message ?? "Something went wrong.",
-    };
-  }
-  return { success: true as const, data: json.data, meta: json.meta };
-};
 export interface AdminUser {
   id: string;
   name: string;
@@ -39,13 +19,13 @@ export interface UsersMeta {
   totalPages: number;
 }
 
-export async function getAllUsers(params: {
+export const getAllUsers = async (params: {
   page?: number;
   limit?: number;
   searchTerm?: string;
   role?: string;
   status?: string;
-}) {
+}) => {
   const query = new URLSearchParams();
   if (params.page) query.set("page", String(params.page));
   if (params.limit) query.set("limit", String(params.limit));
@@ -64,7 +44,7 @@ export async function getAllUsers(params: {
     meta: result.meta as UsersMeta,
     error: null,
   };
-}
+};
 export const updateUserStatusAction = async (
   userId: string,
   nextStatus: "ACTIVE" | "BLOCKED",

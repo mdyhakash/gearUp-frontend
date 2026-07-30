@@ -1,38 +1,14 @@
 "use server";
-
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { authFetch } from "@/lib/auth-fetch";
 
-async function authFetch(path: string, options: RequestInit = {}) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
-
-  const res = await fetch(`${process.env.BACKEND_API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: `accessToken=${accessToken}`,
-      ...options.headers,
-    },
-    cache: "no-store",
-  });
-
-  const json = await res.json();
-  if (!res.ok || !json.success) {
-    return {
-      success: false as const,
-      message: json?.message ?? "Something went wrong.",
-    };
-  }
-  return { success: true as const, data: json.data };
-}
 export interface Category {
   id: string;
   name: string;
   description: string | null;
 }
 
-export async function getAllCategories() {
+export const getAllCategories = async () => {
   const result = await authFetch("/api/categories");
 
   if (!result.success) {
@@ -40,13 +16,13 @@ export async function getAllCategories() {
   }
 
   return { data: result.data as Category[], error: null };
-}
+};
 type CategoryActionState = { success: boolean; message: string };
 
-export async function createCategoryAction(
+export const createCategoryAction = async (
   prevState: CategoryActionState,
   formData: FormData,
-): Promise<CategoryActionState> {
+): Promise<CategoryActionState> => {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   console.log({
@@ -64,13 +40,13 @@ export async function createCategoryAction(
     success: result.success,
     message: result.success ? "Category created." : result.message,
   };
-}
+};
 
-export async function updateCategoryAction(
+export const updateCategoryAction = async (
   categoryId: string,
   prevState: CategoryActionState,
   formData: FormData,
-): Promise<CategoryActionState> {
+): Promise<CategoryActionState> => {
   const name = formData.get("name") as string;
   //const description = formData.get("description") as string;
 
@@ -85,9 +61,9 @@ export async function updateCategoryAction(
     success: result.success,
     message: result.success ? "Category updated." : result.message,
   };
-}
+};
 
-export async function deleteCategoryAction(categoryId: string) {
+export const deleteCategoryAction = async (categoryId: string) => {
   const result = await authFetch(`/api/categories/${categoryId}`, {
     method: "DELETE",
   });
@@ -95,4 +71,4 @@ export async function deleteCategoryAction(categoryId: string) {
   if (result.success) revalidatePath("/admin-dashboard/categories");
 
   return result;
-}
+};
