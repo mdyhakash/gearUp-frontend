@@ -1,26 +1,9 @@
 "use server";
-
 import { authFetch } from "@/lib/auth-fetch";
-import { GearItem } from "@/types/gear";
+import { GearActionState, GearItem } from "@/types/gear";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export interface Gear {
-  id: string;
-  name: string;
-  description: string;
-  brand: string;
-  image: string;
-  dailyRate: number;
-  stock: number;
-  condition: string;
-  isAvailable: boolean;
-  categoryId: string;
-}
-type GearActionState = {
-  success: boolean;
-  message: string;
-};
 export const getAllProviderGear = async () => {
   const result = await authFetch("/api/gear");
 

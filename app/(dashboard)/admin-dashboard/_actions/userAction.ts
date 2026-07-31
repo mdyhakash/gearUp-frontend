@@ -1,8 +1,6 @@
 "use server";
 import { authFetch } from "@/lib/auth-fetch";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-
 
 export interface AdminUser {
   id: string;

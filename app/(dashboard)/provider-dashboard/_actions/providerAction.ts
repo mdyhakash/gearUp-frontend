@@ -1,34 +1,9 @@
 "use server";
 import { authFetch } from "@/lib/auth-fetch";
+import { ProviderOrder } from "@/types/order";
+import { UpdatableRentalStatus } from "@/types/rental";
 import { revalidatePath } from "next/cache";
-export type RentalStatus =
-  | "PLACED"
-  | "CONFIRMED"
-  | "PAID"
-  | "PICKED_UP"
-  | "RETURNED"
-  | "CANCELLED";
 
-export type UpdatableRentalStatus =
-  | "CONFIRMED"
-  | "PICKED_UP"
-  | "RETURNED"
-  | "CANCELLED";
-
-export interface ProviderOrder {
-  id: string;
-  startDate: string;
-  endDate: string;
-  status: RentalStatus;
-  customer: {
-    name: string;
-  };
-  items: {
-    gearItem: {
-      name: string;
-    };
-  }[];
-}
 export const getProviderOrder = async () => {
   const result = await authFetch("/api/provider/orders");
 

@@ -24,8 +24,7 @@ const steps = [
 ];
 
 export default async function HomePage() {
-  const { data: gears, error } = await getAllProviderGear();
-  console.log(gears);
+  const { data: gears } = await getAllProviderGear();
   return (
     <div>
       {/* Hero */}

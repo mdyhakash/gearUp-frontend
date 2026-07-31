@@ -21,3 +21,19 @@ export interface GearItem {
   };
   rating?: number;
 }
+export interface Gear {
+  id: string;
+  name: string;
+  description: string;
+  brand: string;
+  image: string;
+  dailyRate: number;
+  stock: number;
+  condition: string;
+  isAvailable: boolean;
+  categoryId: string;
+}
+export type GearActionState = {
+  success: boolean;
+  message: string;
+};

@@ -1,3 +1,4 @@
+"use server";
 import { authFetch } from "@/lib/auth-fetch";
 import { GearItem } from "@/types/gear";
 
