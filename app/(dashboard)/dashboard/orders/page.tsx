@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/orders/status-badge";
 import { getMyRentals } from "../_actions/rentalAction";
+import { CancelRentalButton } from "@/components/orders/cancel-rental-button";
 
 export default async function CustomerOrdersPage() {
   const { data: orders, meta, error } = await getMyRentals();
-  console.log(orders);
   return (
     <div className="space-y-4">
       <h2 className="font-display text-xl font-bold text-foreground">
@@ -31,6 +31,7 @@ export default async function CustomerOrdersPage() {
                   <th className="px-5 py-3">Total</th>
                   <th className="px-5 py-3">Status</th>
                   <th className="px-5 py-3 text-right">Action</th>
+                  <th className="px-5 py-3 text-right">Details</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -89,12 +90,25 @@ export default async function CustomerOrdersPage() {
                           Rental in progress
                         </span>
                       ) : order.status === "PLACED" ? (
-                        <span className="text-xs text-muted-foreground">
-                          Waiting for confirmation
-                        </span>
+                        <div className="flex items-center justify-end gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            Waiting for confirmation
+                          </span>
+
+                          <CancelRentalButton rentalId={order.id} />
+                        </div>
                       ) : (
                         <span className="text-xs text-muted-foreground">—</span>
                       )}
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex justify-center">
+                        <Button size="sm" variant="outline" asChild>
+                          <Link href={`/dashboard/orders/${order.id}`}>
+                            View
+                          </Link>
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}

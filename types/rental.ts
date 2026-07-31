@@ -7,8 +7,11 @@ export type RentalStatus =
   | "CANCELLED";
 
 export interface RentalItem {
+  id: string;
   gearItemId: string;
   quantity: number;
+  dailyRate: number;
+  subtotal: number;
   gearItem: {
     id: string;
     name: string;
