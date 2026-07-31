@@ -15,8 +15,6 @@ export default async function GearDetailsPage({
 }) {
   const { id } = await params;
   const { data: gear, error } = await getGearById(id);
-  //console.log(gear);
-  //const gear = gears.find((g) => g.id === params.id) ?? gears[0];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -116,7 +114,11 @@ export default async function GearDetailsPage({
 
           {/* Right column — sticky rent widget */}
           <div className="lg:sticky lg:top-24 lg:h-fit">
-            <RentWidget dailyRate={gear.dailyRate} />
+            <RentWidget
+              gearItemId={gear.id}
+              dailyRate={gear.dailyRate}
+              stock={gear.stock}
+            />
           </div>
         </div>
       )}

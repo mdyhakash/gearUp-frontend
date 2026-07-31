@@ -46,6 +46,15 @@ export interface Rental {
   items: RentalItem[];
   payments: RentalPayment[];
 }
+
+export interface CreateRentalOrder {
+  startDate: string;
+  endDate: string;
+  items: {
+    gearItemId: string;
+    quantity: number;
+  }[];
+}
 export type UpdatableRentalStatus =
   | "CONFIRMED"
   | "PICKED_UP"
