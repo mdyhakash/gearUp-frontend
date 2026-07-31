@@ -1,4 +1,4 @@
-import { RentalStatus } from "@/lib/types";
+import { RentalStatus } from "@/types/rental";
 
 const statusConfig: Record<RentalStatus, { label: string; color: string }> = {
   PLACED: { label: "Placed", color: "#C68A2E" },

@@ -1,4 +1,5 @@
-import { GearItem } from "./types";
+import { GearItem } from "@/types/gear";
+
 
 export const categories = [
   "Camping",
@@ -275,5 +276,65 @@ export const mockCategories = [
     name: "Hiking",
     description: "Backpacks, trekking poles, and boots.",
     gearCount: 20,
+  },
+];
+export type PaymentStatus = "PAID" | "FAILED" | "REFUNDED";
+export type PaymentMethod = "STRIPE" | "SSLCOMMERZ";
+
+export type Payment = {
+  id: string;
+  orderId: string;
+  gearName: string;
+  date: string;
+  amount: number;
+  method: PaymentMethod;
+  status: PaymentStatus;
+};
+
+export const mockPayments: Payment[] = [
+  {
+    id: "PAY-3051",
+    orderId: "ORD-1042",
+    gearName: "4-Person Dome Tent",
+    date: "Aug 2, 2026",
+    amount: 54,
+    method: "STRIPE",
+    status: "PAID",
+  },
+  {
+    id: "PAY-3048",
+    orderId: "ORD-1041",
+    gearName: "Carbon Mountain Bike",
+    date: "Jul 28, 2026",
+    amount: 64,
+    method: "STRIPE",
+    status: "PAID",
+  },
+  {
+    id: "PAY-3040",
+    orderId: "ORD-1039",
+    gearName: "Inflatable Kayak",
+    date: "Jul 20, 2026",
+    amount: 50,
+    method: "SSLCOMMERZ",
+    status: "PAID",
+  },
+  {
+    id: "PAY-3033",
+    orderId: "ORD-1035",
+    gearName: "Climbing Harness Set",
+    date: "Jul 10, 2026",
+    amount: 30,
+    method: "STRIPE",
+    status: "REFUNDED",
+  },
+  {
+    id: "PAY-3021",
+    orderId: "ORD-1029",
+    gearName: "60L Hiking Backpack",
+    date: "Jun 30, 2026",
+    amount: 24,
+    method: "STRIPE",
+    status: "FAILED",
   },
 ];

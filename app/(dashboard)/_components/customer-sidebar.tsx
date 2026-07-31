@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, ListOrdered, Star, UserCircle } from "lucide-react";
+import { CreditCard, LayoutDashboard, ListOrdered, Star, UserCircle } from "lucide-react";
 
 import { SidebarNav, DashboardNavItem } from "./sidebar-nav";
 
@@ -19,6 +19,11 @@ const navItems: DashboardNavItem[] = [
     label: "My Orders",
     href: "/dashboard/orders",
     icon: ListOrdered,
+  },
+  {
+    label: "Payments",
+    href: "/dashboard/payments",
+    icon: CreditCard,
   },
   {
     label: "Reviews",
