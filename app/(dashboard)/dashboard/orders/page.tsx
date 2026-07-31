@@ -15,6 +15,10 @@ export default async function CustomerOrdersPage() {
         <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
           {error}
         </p>
+      ) : orders.length === 0 ? (
+        <p className="p-5 text-center text-muted-foreground">
+          You haven't placed any orders yet.
+        </p>
       ) : (
         <>
           <div className="hidden overflow-hidden rounded-xl border border-border bg-card md:block">
