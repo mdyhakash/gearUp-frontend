@@ -38,8 +38,14 @@ export const getMyReviews = async () => {
   };
 };
 
-export const getGearReviews = async (gearItemId: string) => {
-  const result = await authFetch(`/api/reviews/${gearItemId}`);
+export const getGearReviews = async (gearItemId: string, page?: string) => {
+  const query = new URLSearchParams();
+  if (page) query.set("page", page);
+  const qs = query.toString();
+
+  const result = await authFetch(
+    `/api/reviews/${gearItemId}${qs ? `?${qs}` : ""}`,
+  );
 
   if (!result.success) {
     return {
@@ -48,7 +54,6 @@ export const getGearReviews = async (gearItemId: string) => {
       error: result.message,
     };
   }
-
   return {
     data: result.data as GearReview[],
     meta: result.meta as GearReviewMeta,

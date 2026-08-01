@@ -1,8 +1,14 @@
 import { StatusBadge } from "@/components/orders/status-badge";
 import { getAllRentals } from "../_actions/rentalAction";
+import { Pagination } from "@/components/shared/pagination";
 
-export default async function AdminOrdersPage() {
-  const { data: rentals, error } = await getAllRentals();
+export default async function AdminOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const { data: rentals, meta, error } = await getAllRentals(params);
 
   return (
     <div className="space-y-4">
@@ -72,6 +78,7 @@ export default async function AdminOrdersPage() {
           </table>
         </div>
       )}
+      {meta && <Pagination totalPages={meta.totalPages} />}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { GearFilters } from "@/components/gear/gear-filters";
 import { GearGrid } from "@/components/gear/gear-grid";
 import { GearSearchBar } from "@/components/gear/gear-search-bar";
 import { GearSort } from "@/components/gear/gear-sort";
+import { Pagination } from "@/components/shared/pagination";
 import { getAllCategories } from "@/lib/actions/categoryAction";
 import { getAllGear } from "@/lib/actions/publicGearAction";
 
@@ -11,7 +12,7 @@ export default async function BrowseGearPage({
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   const params = await searchParams;
-  const { data: gears } = await getAllGear(params);
+  const { data: gears, meta } = await getAllGear(params);
   const { data: categories } = await getAllCategories();
 
   return (
@@ -33,6 +34,7 @@ export default async function BrowseGearPage({
         <GearFilters categories={categories} />
         <div className="flex-1">
           <GearGrid gears={gears} />
+          {meta && <Pagination totalPages={meta.totalPages} />}
         </div>
       </div>
     </div>

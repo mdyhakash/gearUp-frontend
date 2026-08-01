@@ -6,19 +6,23 @@ import { ReviewItem } from "@/components/reviews/review-item";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { Pagination } from "@/components/shared/pagination";
 import { getGearReviews } from "@/app/(dashboard)/dashboard/_actions/reviewAction";
 import { getGearById } from "@/lib/actions/publicGearAction";
-import { AddToCartButton } from "@/components/gear/add-to-cart-button";
 
 export default async function GearDetailsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ tab?: string; reviewPage?: string }>;
 }) {
   const { id } = await params;
+  const { tab, reviewPage } = await searchParams;
+  const activeTab = tab ?? "description";
+
   const [{ data: gear, error }, { data: reviews, meta: reviewMeta }] =
-    await Promise.all([getGearById(id), getGearReviews(id)]);
+    await Promise.all([getGearById(id), getGearReviews(id, reviewPage)]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -58,7 +62,7 @@ export default async function GearDetailsPage({
 
             <Separator className="my-6" />
 
-            <Tabs defaultValue="description" className="flex w-full flex-col">
+            <Tabs defaultValue={activeTab} className="flex w-full flex-col">
               <TabsList className="w-fit bg-secondary">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="provider">Provider</TabsTrigger>
@@ -113,32 +117,32 @@ export default async function GearDetailsPage({
                       No reviews yet.
                     </p>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {reviews.length === 0 ? (
-                        <p className="text-sm text-muted-foreground">
-                          No reviews yet.
-                        </p>
-                      ) : (
-                        <div className="flex flex-col gap-4">
-                          {reviews.map((review) => (
-                            <div
-                              key={review.id}
-                              className="rounded-lg border border-border p-4"
-                            >
-                              <ReviewItem
-                                gearName={gear.name}
-                                customerName={review.customer.name}
-                                rating={review.rating}
-                                comment={review.comment}
-                                date={new Date(
-                                  review.createdAt,
-                                ).toLocaleDateString()}
-                              />
-                            </div>
-                          ))}
+                    <div className="flex flex-col gap-4">
+                      {reviews.map((review) => (
+                        <div
+                          key={review.id}
+                          className="rounded-lg border border-border p-4"
+                        >
+                          <ReviewItem
+                            gearName={gear.name}
+                            customerName={review.customer.name}
+                            rating={review.rating}
+                            comment={review.comment}
+                            date={new Date(
+                              review.createdAt,
+                            ).toLocaleDateString()}
+                          />
                         </div>
-                      )}
+                      ))}
                     </div>
+                  )}
+
+                  {reviewMeta && reviewMeta.totalPages > 1 && (
+                    <Pagination
+                      totalPages={reviewMeta.totalPages}
+                      paramName="reviewPage"
+                      extraParams={{ tab: "reviews" }}
+                    />
                   )}
                 </div>
               </TabsContent>

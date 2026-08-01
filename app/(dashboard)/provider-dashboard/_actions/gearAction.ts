@@ -4,15 +4,22 @@ import { GearActionState, GearItem } from "@/types/gear";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const getAllProviderGear = async () => {
-  const result = await authFetch("/api/gear");
+export const getAllProviderGear = async (
+  providerId: string,
+  params?: { page?: string; limit?: string },
+) => {
+  const query = new URLSearchParams({ providerId });
+  if (params?.page) query.set("page", params.page);
+  if (params?.limit) query.set("limit", params.limit);
+
+  const result = await authFetch(`/api/gear?${query.toString()}`);
 
   if (!result.success) {
-    return { data: [] as GearItem[], error: result.message };
+    return { data: [] as GearItem[], meta: null, error: result.message };
   }
-
-  return { data: result.data as GearItem[], error: null };
+  return { data: result.data as GearItem[], meta: result.meta, error: null };
 };
+
 export const getGearById = async (gearId: string) => {
   const result = await authFetch(`/api/gear/${gearId}`);
 

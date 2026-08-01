@@ -2,9 +2,15 @@ import { Eye, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConditionBadge } from "@/components/condition-badge";
 import { getAllGear } from "../_actions/gearAction";
+import { Pagination } from "@/components/shared/pagination";
 
-export default async function AdminGearModerationPage() {
-  const { data: gear, error } = await getAllGear();
+export default async function AdminGearModerationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const { data: gear, meta, error } = await getAllGear(params);
 
   return (
     <div className="space-y-4">
@@ -63,6 +69,7 @@ export default async function AdminGearModerationPage() {
           </table>
         </div>
       )}
+      {meta && <Pagination totalPages={meta.totalPages} />}
     </div>
   );
 }

@@ -3,9 +3,15 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/orders/status-badge";
 import { getMyRentals } from "../_actions/rentalAction";
 import { CancelRentalButton } from "@/components/orders/cancel-rental-button";
+import { Pagination } from "@/components/shared/pagination";
 
-export default async function CustomerOrdersPage() {
-  const { data: orders, meta, error } = await getMyRentals();
+export default async function CustomerOrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
+  const { data: orders, meta, error } = await getMyRentals(params);
   return (
     <div className="space-y-4">
       <h2 className="font-display text-xl font-bold text-foreground">
@@ -183,6 +189,7 @@ export default async function CustomerOrdersPage() {
           </div>
         </>
       )}
+      {meta && <Pagination totalPages={meta.totalPages} />}
     </div>
   );
 }

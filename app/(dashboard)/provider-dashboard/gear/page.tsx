@@ -6,13 +6,22 @@ import { DeleteGearButton } from "../_components/delete-gear-button";
 import { GearForm } from "@/components/gear/gear-form";
 import { getAllCategories } from "../../admin-dashboard/_actions/categoryAction";
 import { Badge } from "@/components/ui/badge";
+import { Pagination } from "@/components/shared/pagination";
 
-export default async function ProviderInventoryPage() {
-  const { data: gears, error } = await getAllProviderGear();
-  const { data: categories } = await getAllCategories();
+export default async function ProviderInventoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const params = await searchParams;
   const me = await getMe();
   const providerId = me.data.result.id;
-  const providerGears = gears.filter((gear) => gear.provider.id === providerId);
+  const {
+    data: providerGears,
+    meta,
+    error,
+  } = await getAllProviderGear(providerId, params);
+  const { data: categories } = await getAllCategories();
 
   return (
     <div className="space-y-4">
@@ -90,6 +99,7 @@ export default async function ProviderInventoryPage() {
           </table>
         </div>
       )}
+      {meta && <Pagination totalPages={meta.totalPages} />}
     </div>
   );
 }

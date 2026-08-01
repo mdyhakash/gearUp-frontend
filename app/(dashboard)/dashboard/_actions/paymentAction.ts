@@ -39,8 +39,6 @@ export async function createPayment(rentalOrderId: string) {
     }),
   });
 
-  console.log(result);
-
   if (!result.success) {
     return {
       success: false,
