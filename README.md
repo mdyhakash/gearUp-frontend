@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GearUp — Frontend
+
+Rent sports & outdoor gear instantly. A Next.js frontend for a three-sided rental marketplace — customers browse and rent gear, providers manage inventory and fulfill orders, admins moderate the platform.
+
+Live: `<add your Vercel URL>` · Backend: `<add your backend URL>` · Demo video: `<add link>`
+
+---
+
+## Screenshots
+
+> _Add screenshots below — recommended: home, gear browse w/ filters, gear detail, cart, customer order tracking, provider order dialog, admin users table._
+
+| Home           | Gear Browse    |
+| -------------- | -------------- |
+| `<screenshot>` | `<screenshot>` |
+
+| Gear Detail    | Cart & Checkout |
+| -------------- | --------------- |
+| `<screenshot>` | `<screenshot>`  |
+
+| Customer Orders | Provider Order Details |
+| --------------- | ---------------------- |
+| `<screenshot>`  | `<screenshot>`         |
+
+| Admin — Users  | Admin — Gear Moderation |
+| -------------- | ----------------------- |
+| `<screenshot>` | `<screenshot>`          |
+
+---
+
+## Tech Stack
+
+- **Next.js 16** — App Router, Server Components, Server Actions, `proxy.ts` for edge-level auth (Next.js 16's rename of `middleware.ts`)
+- **TypeScript**
+- **Tailwind CSS** + shadcn/ui (Radix primitives)
+- **Zustand** — cart state only, persisted to `localStorage`; everything else (filters, sort, search, pagination) is driven by URL search params and rendered server-side, deliberately avoiding a client cache layer
+- **JWT auth** — access/refresh tokens in httpOnly cookies, verified and rotated in `proxy.ts`
+- **SSLCommerz** — hosted checkout redirect for payment
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install
+
+```bash
+npm install
+```
+
+### 2. Environment
+
+Create `.env.local` in the project root:
+
+```
+BACKEND_API_URL=http://localhost:5000
+JWT_ACCESS_SECRET=your_access_token_secret
+JWT_REFRESH_SECRET=your_refresh_token_secret
+```
+
+`JWT_ACCESS_SECRET`/`JWT_REFRESH_SECRET` must match what your backend signs tokens with — `proxy.ts` verifies tokens locally, without a round-trip to the backend, so a mismatch here silently breaks all route protection.
+
+### 3. Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Admin credentials (for grading/testing)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+Email:    <add>
+Password: <add>
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Roles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Role     | Dashboard             | Can do                                                                                      |
+| -------- | --------------------- | ------------------------------------------------------------------------------------------- |
+| Customer | `/dashboard`          | Browse & rent gear, cart & checkout, track orders, pay, view payment history, leave reviews |
+| Provider | `/provider-dashboard` | Manage gear inventory, confirm/fulfill incoming orders                                      |
+| Admin    | `/admin-dashboard`    | Manage users (suspend/activate), moderate gear & orders, manage categories                  |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Role is chosen at registration. `proxy.ts` enforces access per role: unauthenticated visitors are redirected to `/login`; an authenticated user hitting the wrong dashboard is redirected to their own.
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/
+  (auth)/              — /login, /register
+  (public)/            — /, /gear, /gear/[id], /cart
+  (dashboard)/
+    dashboard/         — customer: orders, payments, reviews, profile
+    provider-dashboard/— provider: gear inventory, orders, profile
+    admin-dashboard/   — admin: users, gear, orders, categories, profile
+  payment/             — /payment/success, /cancel, /failed (SSLCommerz redirect targets)
+components/
+  gear/                — browse/search/filter/sort, gear card, rent widget, add-to-cart
+  cart/                — cart view (item list, shared date range, checkout)
+  orders/              — status badges, provider order dialog, cancel button
+  payment/             — payment status badge, receipt dialog, pay-now button
+  reviews/             — review item, review form
+  shared/              — navbar, mobile nav, cart button, pagination
+  ui/                  — shadcn primitives
+store/
+  cart-store.ts        — Zustand cart, persisted to localStorage
+lib/actions/            — public server actions (gear, categories)
+service/                — auth/session helpers (getMe, refreshToken, logout)
+types/                  — shared TypeScript types matching backend response shapes
+proxy.ts                — JWT verification + role-based route protection (Next.js 16 middleware)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key Flows
+
+**Customer rental flow:**
+Browse/search/filter gear → gear detail → add to cart (quantity only, no per-item dates) → `/cart` → pick one shared rental date range for the whole order → place order (`PLACED`) → provider confirms (`CONFIRMED`) → customer pays via SSLCommerz (`PAID`) → provider marks picked up (`PICKED_UP`) → provider marks returned (`RETURNED`) → customer leaves a review.
+
+**Provider flow:**
+Add gear (URL-based image, pricing, stock) → incoming order arrives (`PLACED`) → confirm or cancel → after payment, mark picked up → mark returned.
+
+**Admin flow:**
+Moderate users (suspend/activate), gear listings, and rental orders platform-wide; manage the shared category list.
+
+## Design Notes / Known Constraints
+
+- **One date range per order.** The backend's `CreateRentalOrder` takes a single `startDate`/`endDate` for the entire order, not per gear item — this is why cart items only carry a quantity, and the rental date range is chosen once, at checkout, for everything in the cart.
+- **Payment is gated on provider confirmation.** `PayNowButton` only renders when an order's status is `CONFIRMED` — a customer cannot pay on a freshly placed (`PLACED`) order, by design.
+- **State strategy.** Only the cart uses global client state (Zustand). Every other stateful UI — filters, sort, search, pagination — reads and writes URL search params and re-renders server-side, so state survives refresh/back-button for free and needs no client cache library.
+- **Server actions co-located per dashboard.** Each dashboard (`dashboard/`, `provider-dashboard/`, `admin-dashboard/`) has its own `_actions/` folder scoped to that role — a customer-facing page never imports a provider or admin action, and vice versa.
+
+## Scripts
+
+```bash
+npm run dev     # development server
+npm run build   # production build
+npm run start   # run production build
+npm run lint    # eslint
+```
