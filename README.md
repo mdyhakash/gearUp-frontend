@@ -2,31 +2,12 @@
 
 Rent sports & outdoor gear instantly. A Next.js frontend for a three-sided rental marketplace — customers browse and rent gear, providers manage inventory and fulfill orders, admins moderate the platform.
 
-Live: `<add your Vercel URL>` · Backend: `<add your backend URL>` · Demo video: `<add link>`
+Live: `https://gearup-frontend-seven.vercel.app/` · Backend: `https://gearup-backend-one.vercel.app/`
 
 ---
 
 ## Screenshots
 
-> _Add screenshots below — recommended: home, gear browse w/ filters, gear detail, cart, customer order tracking, provider order dialog, admin users table._
-
-| Home           | Gear Browse    |
-| -------------- | -------------- |
-| `<screenshot>` | `<screenshot>` |
-
-| Gear Detail    | Cart & Checkout |
-| -------------- | --------------- |
-| `<screenshot>` | `<screenshot>`  |
-
-| Customer Orders | Provider Order Details |
-| --------------- | ---------------------- |
-| `<screenshot>`  | `<screenshot>`         |
-
-| Admin — Users  | Admin — Gear Moderation |
-| -------------- | ----------------------- |
-| `<screenshot>` | `<screenshot>`          |
-
----
 
 ## Tech Stack
 
@@ -68,8 +49,8 @@ npm run dev
 ### 4. Admin credentials (for grading/testing)
 
 ```
-Email:    <add>
-Password: <add>
+Email:    admin@gmail.com
+Password: 12345
 ```
 
 ---
