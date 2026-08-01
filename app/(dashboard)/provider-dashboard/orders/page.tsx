@@ -1,10 +1,8 @@
 import { StatusBadge } from "@/components/orders/status-badge";
-import {
-  getProviderOrder,
-  RentalStatus,
-  UpdatableRentalStatus,
-} from "../_actions/providerAction";
+import { getProviderOrder } from "../_actions/providerAction";
 import { UpdateOrderButton } from "../_components/UpdateOrderButton";
+import { ProviderOrderDetailsDialog } from "@/components/orders/provider-order-details-dialog";
+import { RentalStatus, UpdatableRentalStatus } from "@/types/rental";
 
 const actionsByStatus: Partial<
   Record<
@@ -71,6 +69,7 @@ export default async function ProviderOrdersPage() {
                 <th className="hidden px-5 py-3 md:table-cell">Gear</th>
                 <th className="hidden px-5 py-3 sm:table-cell">Dates</th>
                 <th className="px-5 py-3">Status</th>
+                <th className="px-5 py-3">Details</th>
                 <th className="px-5 py-3 text-right">Action</th>
               </tr>
             </thead>
@@ -112,6 +111,12 @@ export default async function ProviderOrdersPage() {
 
                       <td className="px-5 py-4">
                         <StatusBadge status={order.status} />
+                      </td>
+                      <td className="px-5 py-4">
+                        <ProviderOrderDetailsDialog
+                          order={order}
+                          actions={actions}
+                        />
                       </td>
 
                       <td className="px-5 py-4">
