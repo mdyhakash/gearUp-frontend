@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getGearById } from "@/app/(dashboard)/provider-dashboard/_actions/gearAction";
+import { getGearReviews } from "@/app/(dashboard)/dashboard/_actions/reviewAction";
 
 export default async function GearDetailsPage({
   params,
@@ -14,7 +15,8 @@ export default async function GearDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data: gear, error } = await getGearById(id);
+  const [{ data: gear, error }, { data: reviews, meta: reviewMeta }] =
+    await Promise.all([getGearById(id), getGearReviews(id)]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -23,9 +25,9 @@ export default async function GearDetailsPage({
           {error}
         </p>
       ) : (
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_360px]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
           {/* Left column */}
-          <div>
+          <div className="min-w-0">
             <GearGallery
               images={gear.image ? [gear.image] : ["/placeholder.png"]}
               name={gear.name}
@@ -47,31 +49,23 @@ export default async function GearDetailsPage({
             </div>
 
             <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
-              {/* <span className="flex items-center gap-1.5">
-              <Star className="h-4 w-4 fill-accent text-accent" /> {gear.rating}{" "}
-              rating
-            </span> */}
               <span className="flex items-center gap-1.5">
                 <Package className="h-4 w-4" /> {gear.stock} in stock
-              </span>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="h-4 w-4" /> {gear.provider.name}
               </span>
             </div>
 
             <Separator className="my-6" />
 
-            <Tabs defaultValue="description">
-              <TabsList className="bg-secondary">
+            <Tabs defaultValue="description" className="flex w-full flex-col">
+              <TabsList className="w-fit bg-secondary">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="provider">Provider</TabsTrigger>
-                {/* <TabsTrigger value="reviews">Reviews ({gear.length})</TabsTrigger> */}
+                <TabsTrigger value="reviews">
+                  Reviews ({reviewMeta?.total ?? 0})
+                </TabsTrigger>
               </TabsList>
 
-              <TabsContent
-                value="description"
-                className="pt-5 text-sm text-muted-foreground"
-              >
+              <TabsContent value="description" className="mt-5 w-full">
                 <p>
                   A well-maintained {gear.name.toLowerCase()} from {gear.brand},
                   cleaned and inspected between every rental. Perfect for
@@ -85,7 +79,7 @@ export default async function GearDetailsPage({
                 </ul>
               </TabsContent>
 
-              <TabsContent value="provider" className="pt-5">
+              <TabsContent value="provider" className="mt-5 w-full">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12 border border-border">
                     <AvatarFallback className="bg-secondary font-semibold text-secondary-foreground">
@@ -96,19 +90,56 @@ export default async function GearDetailsPage({
                     <p className="font-semibold text-foreground">
                       {gear.provider.name}
                     </p>
-                    <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <ShieldCheck className="h-3.5 w-3.5" /> Verified provider
-                      since 2024
-                    </p>
                   </div>
                 </div>
               </TabsContent>
 
-              {/* <TabsContent value="reviews" className="pt-2">
-              {mockReviews.map((r) => (
-                <ReviewItem key={r.id} {...r} />
-              ))}
-            </TabsContent> */}
+              <TabsContent value="reviews" className="mt-5 w-full">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Star className="h-5 w-5 fill-accent text-accent" />
+                    <span className="font-semibold">
+                      {reviewMeta?.averageRating ?? 0}/5
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      ({reviewMeta?.total ?? 0} reviews)
+                    </span>
+                  </div>
+
+                  {reviews.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      No reviews yet.
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      {reviews.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                          No reviews yet.
+                        </p>
+                      ) : (
+                        <div className="flex flex-col gap-4">
+                          {reviews.map((review) => (
+                            <div
+                              key={review.id}
+                              className="rounded-lg border border-border p-4"
+                            >
+                              <ReviewItem
+                                gearName={gear.name}
+                                customerName={review.customer.name}
+                                rating={review.rating}
+                                comment={review.comment}
+                                date={new Date(
+                                  review.createdAt,
+                                ).toLocaleDateString()}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
             </Tabs>
           </div>
 
