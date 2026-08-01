@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { ConditionBadge } from "../condition-badge";
 import { Button } from "@/components/ui/button";
 import { GearItem } from "@/types/gear";
+import { AddToCartButton } from "./add-to-cart-button";
 
 export function GearCard({ gear }: { gear: GearItem }) {
   return (
@@ -11,11 +12,7 @@ export function GearCard({ gear }: { gear: GearItem }) {
       {/* Image */}
       <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
         <Image
-          src={
-            typeof gear.image === "string" && gear.image.length > 0
-              ? gear.image
-              : "/placeholder-gear.jpg"
-          }
+          src={gear.image ?? "/placeholder-gear.jpg"}
           alt={gear.name}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -63,13 +60,20 @@ export function GearCard({ gear }: { gear: GearItem }) {
           )}
         </div>
 
-        <Button
-          asChild
-          className="mt-3 w-full bg-primary text-primary-foreground hover:bg-primary/90"
-          disabled={!gear.isAvailable}
-        >
-          <Link href={`/gear/${gear.id}`}>View Details</Link>
-        </Button>
+        <div className="mt-3 flex gap-2">
+          <Button
+            asChild
+            variant="outline"
+            className="flex-1"
+            disabled={!gear.isAvailable}
+          >
+            <Link href={`/gear/${gear.id}`}>View Details</Link>
+          </Button>
+          <AddToCartButton
+            gear={gear}
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          />
+        </div>
       </div>
     </div>
   );

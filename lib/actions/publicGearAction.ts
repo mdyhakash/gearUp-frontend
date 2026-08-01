@@ -31,3 +31,13 @@ export const getAllGear = async (filters: GearSearchParams = {}) => {
   }
   return { data: result.data as GearItem[], meta: result.meta, error: null };
 };
+
+export const getGearById = async (gearId: string) => {
+  const result = await authFetch(`/api/gear/${gearId}`);
+
+  if (!result.success) {
+    return { data: null as GearItem | null, error: result.message };
+  }
+
+  return { data: result.data as GearItem, error: null };
+};

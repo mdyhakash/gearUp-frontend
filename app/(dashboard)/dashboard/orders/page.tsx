@@ -69,9 +69,7 @@ export default async function CustomerOrdersPage() {
                           className="bg-accent text-accent-foreground hover:bg-accent/90"
                           asChild
                         >
-                          <Link
-                            href={`/dashboard/customer/orders/${order.id}/pay`}
-                          >
+                          <Link href={`/dashboard/orders/${order.id}`}>
                             Pay Now
                           </Link>
                         </Button>
@@ -149,12 +147,10 @@ export default async function CustomerOrdersPage() {
                 {order.status === "CONFIRMED" ? (
                   <Button
                     size="sm"
-                    className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90"
                     asChild
                   >
-                    <Link href={`/dashboard/customer/orders/${order.id}/pay`}>
-                      Pay Now
-                    </Link>
+                    <Link href={`/dashboard/orders/${order.id}`}>Pay Now</Link>
                   </Button>
                 ) : order.status === "RETURNED" ? (
                   <Button

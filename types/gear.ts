@@ -4,7 +4,7 @@ export interface GearItem {
   name: string;
   description?: string;
   brand?: string;
-  image?: string | null;
+  image?: string;
   dailyRate: number;
   stock: number;
   condition: GearCondition;

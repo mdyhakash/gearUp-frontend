@@ -1,4 +1,4 @@
-import { MapPin, Package, ShieldCheck, Star } from "lucide-react";
+import { Package, Star } from "lucide-react";
 import { GearGallery } from "@/components/gear/gear-gallery";
 import { RentWidget } from "@/components/gear/rent-widget";
 import { ConditionBadge } from "@/components/condition-badge";
@@ -6,8 +6,10 @@ import { ReviewItem } from "@/components/reviews/review-item";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getGearById } from "@/app/(dashboard)/provider-dashboard/_actions/gearAction";
+
 import { getGearReviews } from "@/app/(dashboard)/dashboard/_actions/reviewAction";
+import { getGearById } from "@/lib/actions/publicGearAction";
+import { AddToCartButton } from "@/components/gear/add-to-cart-button";
 
 export default async function GearDetailsPage({
   params,
@@ -145,11 +147,7 @@ export default async function GearDetailsPage({
 
           {/* Right column — sticky rent widget */}
           <div className="lg:sticky lg:top-24 lg:h-fit">
-            <RentWidget
-              gearItemId={gear.id}
-              dailyRate={gear.dailyRate}
-              stock={gear.stock}
-            />
+            <RentWidget gear={gear} />
           </div>
         </div>
       )}

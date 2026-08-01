@@ -6,6 +6,7 @@ import { Logo } from "./logo";
 import { MobileNav } from "./mobile-nav";
 import { UserMenu } from "./user-menu";
 import { NavbarProps } from "@/types/user";
+import { CartButton } from "./cart-button";
 
 const navLinks = [
   { label: "Browse Gear", href: "/gear" },
@@ -31,6 +32,7 @@ export function Navbar({ user }: NavbarProps) {
         </nav>
 
         <div className="hidden items-center justify-end gap-3 lg:flex">
+          <CartButton />
           {user?.success ? (
             <UserMenu user={user.data.result} />
           ) : (

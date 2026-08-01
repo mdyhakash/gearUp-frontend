@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, LogOut, Menu, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Settings,
+  ShoppingCart,
+} from "lucide-react";
 import { toast } from "sonner";
-
 import { logout } from "@/service/logout";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { Logo } from "./logo";
 import type { NavbarProps } from "@/types/user";
+import { useCartStore } from "@/store/cart-store";
 
 type MobileNavProps = {
   navLinks: {
@@ -30,6 +36,12 @@ export function MobileNav({ navLinks, user }: MobileNavProps) {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const [mounted, setMounted] = useState(false);
+  const cartCount = useCartStore((s) =>
+    s.items.reduce((sum, i) => sum + i.quantity, 0),
+  );
+  useEffect(() => setMounted(true), []);
 
   const isDashboard = pathname.startsWith("/dashboard");
 
@@ -68,6 +80,20 @@ export function MobileNav({ navLinks, user }: MobileNavProps) {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/cart"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-between rounded-md px-3 py-2.5 text-base font-medium text-foreground transition-colors hover:bg-secondary"
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart className="h-4 w-4" /> Cart
+              </span>
+              {mounted && cartCount > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-bold text-accent-foreground">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </nav>
 
           <div className="mt-auto border-t border-border pt-6">
