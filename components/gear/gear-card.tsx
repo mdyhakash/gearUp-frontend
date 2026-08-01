@@ -11,7 +11,11 @@ export function GearCard({ gear }: { gear: GearItem }) {
       {/* Image */}
       <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
         <Image
-          src={gear.image ?? "/placeholder-gear.jpg"}
+          src={
+            typeof gear.image === "string" && gear.image.length > 0
+              ? gear.image
+              : "/placeholder-gear.jpg"
+          }
           alt={gear.name}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"

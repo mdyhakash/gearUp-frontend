@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -20,23 +20,51 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { categories } from "@/lib/data";
+import { Category } from "@/lib/actions/categoryAction";
 
-function FilterFields() {
-  const [price, setPrice] = useState([0, 50]);
+const FILTER_KEYS = ["categoryId", "minPrice", "maxPrice"];
+
+function FilterFields({ categories }: { categories: Category[] }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [price, setPrice] = useState([
+    Number(searchParams.get("minPrice") ?? 0),
+    Number(searchParams.get("maxPrice") ?? 100),
+  ]);
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set(key, value);
+    else params.delete(key);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const clearFilters = () => {
+    setPrice([0, 100]);
+    const params = new URLSearchParams(searchParams.toString());
+    FILTER_KEYS.forEach((key) => params.delete(key));
+    router.push(
+      params.toString() ? `${pathname}?${params.toString()}` : pathname,
+    );
+  };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
         <Label>Category</Label>
-        <Select>
+        <Select
+          value={searchParams.get("categoryId") ?? ""}
+          onValueChange={(value) => updateParam("categoryId", value)}
+        >
           <SelectTrigger>
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
             {categories.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -53,49 +81,37 @@ function FilterFields() {
         <Slider
           value={price}
           onValueChange={setPrice}
+          onValueCommit={(value) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("minPrice", String(value[0]));
+            params.set("maxPrice", String(value[1]));
+            router.push(`${pathname}?${params.toString()}`);
+          }}
           max={100}
           step={1}
           className="**:[[role=slider]]:bg-primary"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>Brand</Label>
-        <Input placeholder="e.g. Trek, Osprey" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-2">
-          <Label>From</Label>
-          <Input type="date" />
-        </div>
-        <div className="space-y-2">
-          <Label>To</Label>
-          <Input type="date" />
-        </div>
-      </div>
-
-      <Button variant="outline" className="w-full">
+      <Button variant="outline" className="w-full" onClick={clearFilters}>
         <X className="mr-1.5 h-3.5 w-3.5" /> Clear Filters
       </Button>
     </div>
   );
 }
 
-export function GearFilters() {
+export function GearFilters({ categories }: { categories: Category[] }) {
   return (
     <>
-      {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 lg:block">
         <div className="sticky top-24 rounded-xl border border-border bg-card p-5">
           <h3 className="mb-5 font-display font-bold text-foreground">
             Filters
           </h3>
-          <FilterFields />
+          <FilterFields categories={categories} />
         </div>
       </aside>
 
-      {/* Mobile filter sheet */}
       <div className="mb-4 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -111,7 +127,7 @@ export function GearFilters() {
               <SheetTitle className="font-display">Filters</SheetTitle>
             </SheetHeader>
             <div className="px-4 py-6">
-              <FilterFields />
+              <FilterFields categories={categories} />
             </div>
           </SheetContent>
         </Sheet>

@@ -3,7 +3,8 @@ import { ArrowRight, ShieldCheck, Tent, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GearGrid } from "@/components/gear/gear-grid";
-import { getAllProviderGear } from "../(dashboard)/provider-dashboard/_actions/gearAction";
+import { getAllGear } from "@/lib/actions/publicGearAction";
+import { HeroSearch } from "@/components/hero-search";
 
 const steps = [
   {
@@ -24,7 +25,11 @@ const steps = [
 ];
 
 export default async function HomePage() {
-  const { data: gears } = await getAllProviderGear();
+  const { data: gears } = await getAllGear({
+    limit: "6",
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
   return (
     <div>
       {/* Hero */}
@@ -39,17 +44,9 @@ export default async function HomePage() {
               booked in minutes and ready when you are.
             </p>
 
-            <div className="mt-8 flex max-w-md flex-col gap-2 rounded-xl bg-card p-2 sm:flex-row">
-              <Input
-                placeholder="Search for gear (e.g. kayak, tent...)"
-                className="border-0 text-foreground shadow-none focus-visible:ring-0"
-              />
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Search
-              </Button>
-            </div>
+            <HeroSearch />
 
-            <div className="mt-8 flex flex-wrap gap-6 font-mono text-sm text-primary-foreground/70">
+            {/* <div className="mt-8 flex flex-wrap gap-6 font-mono text-sm text-primary-foreground/70">
               <span>
                 <b className="text-primary-foreground">1,200+</b> gear items
               </span>
@@ -59,7 +56,7 @@ export default async function HomePage() {
               <span>
                 <b className="text-primary-foreground">4.8★</b> avg. rating
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -123,10 +120,11 @@ export default async function HomePage() {
             </p>
           </div>
           <Button
+            asChild
             size="lg"
             className="bg-accent text-accent-foreground hover:bg-accent/90"
           >
-            Become a Provider
+            <Link href="/register">Become a Provider</Link>
           </Button>
         </div>
       </section>
