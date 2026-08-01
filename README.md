@@ -46,7 +46,7 @@ npm run dev
 
 `http://localhost:3000`
 
-### 4. Admin credentials (for grading/testing)
+### 4. Admin credentials
 
 ```
 Email:    admin@gmail.com
