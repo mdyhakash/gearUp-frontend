@@ -2,10 +2,8 @@
 
 import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  updateProviderOrderStatus,
-  UpdatableRentalStatus,
-} from "../_actions/providerAction";
+import { updateProviderOrderStatus } from "../_actions/providerAction";
+import { UpdatableRentalStatus } from "@/types/rental";
 
 type UpdateOrderButtonProps = {
   orderId: string;

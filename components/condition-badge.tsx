@@ -1,4 +1,4 @@
-import { GearCondition } from "@/lib/types";
+import { GearCondition } from "@/types/gear";
 import { cn } from "@/lib/utils";
 
 const styles: Record<GearCondition, string> = {

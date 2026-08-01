@@ -1,11 +1,16 @@
 import { Package, ListOrdered, Wallet, Clock } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { getAllProviderGear } from "./_actions/gearAction";
+import { getMe } from "@/service/getMe";
 
 export default async function ProviderOverviewPage() {
-  const gear = await getAllProviderGear();
+  const me = await getMe();
+  const providerId = me.data.result.id;
+  const { data: gear, meta } = await getAllProviderGear(providerId, {
+    limit: "1",
+  });
 
-  const totalGear = gear.data.length;
+  const totalGear = meta?.totalGearCount ?? gear.length;
 
   return (
     <div className="space-y-6">
