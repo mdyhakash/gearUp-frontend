@@ -2,6 +2,7 @@ import { CreditCard, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getRentalById } from "../../_actions/rentalAction";
+import { PayNowButton } from "@/components/payment/pay-now-button";
 
 export default async function PayOrderPage({
   params,
@@ -86,15 +87,33 @@ export default async function PayOrderPage({
                 be made.
               </p>
             )}
-            <Button
-              size="lg"
-              className="mt-6 w-full bg-primary text-primary-foreground hover:bg-primary/90"
-              disabled={rental.status !== "CONFIRMED"}
-            >
-              {rental.status === "CONFIRMED"
-                ? `Pay $${rental.totalAmount} Securely`
-                : "Waiting for Confirmation"}
-            </Button>
+            {rental.status === "CONFIRMED" ? (
+              <PayNowButton
+                rentalId={rental.id}
+                amount={rental.totalAmount}
+                className="mt-6 w-full"
+              />
+            ) : rental.status === "PAID" ? (
+              <Button
+                size="lg"
+                className="mt-6 w-full"
+                variant="secondary"
+                disabled
+              >
+                Payment Completed
+              </Button>
+            ) : (
+              <>
+                <p className="mt-4 text-center text-sm text-muted-foreground">
+                  Your order must be confirmed by the provider before payment
+                  can be made.
+                </p>
+
+                <Button size="lg" className="mt-6 w-full" disabled>
+                  Waiting for Confirmation
+                </Button>
+              </>
+            )}
 
             <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5" />

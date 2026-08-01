@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Package, Wallet, Star, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { StatusBadge } from "@/components/orders/status-badge";
 import { getMyRentals } from "./_actions/rentalAction";
+import { PayNowButton } from "@/components/payment/pay-now-button";
 
 export default async function CustomerOverviewPage() {
   const { data: orders, error } = await getMyRentals();
@@ -80,15 +80,10 @@ export default async function CustomerOverviewPage() {
                     ${order.totalAmount}
                   </span>
                   {order.status === "CONFIRMED" ? (
-                    <Button
-                      size="sm"
-                      className="bg-accent text-accent-foreground hover:bg-accent/90"
-                      asChild
-                    >
-                      <Link href={`/dashboard/customer/orders/${order.id}/pay`}>
-                        Pay Now
-                      </Link>
-                    </Button>
+                    <PayNowButton
+                      rentalId={order.id}
+                      amount={order.totalAmount}
+                    />
                   ) : (
                     <span className="text-xs text-muted-foreground"></span>
                   )}

@@ -1,3 +1,4 @@
+"use server";
 import { authFetch } from "@/lib/auth-fetch";
 import { Payment } from "@/types/payment";
 
@@ -29,3 +30,30 @@ export const getPaymentsById = async (id: string) => {
     error: null,
   };
 };
+
+export async function createPayment(rentalOrderId: string) {
+  const result = await authFetch("/api/payments/create", {
+    method: "POST",
+    body: JSON.stringify({
+      rentalOrderId,
+    }),
+  });
+
+  console.log(result);
+
+  if (!result.success) {
+    return {
+      success: false,
+      paymentUrl: null,
+      transactionId: null,
+      message: result.message,
+    };
+  }
+
+  return {
+    success: true,
+    paymentUrl: result.data.paymentUrl,
+    transactionId: result.data.transactionId,
+    message: result.message,
+  };
+}
